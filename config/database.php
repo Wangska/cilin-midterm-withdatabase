@@ -2,7 +2,7 @@
 class Database {
     // Update these values to match your Coolify DB settings
     private $host = "coolify-db";       // Service name of your MySQL in Coolify
-    private $port = "3307";             // MySQL default port (or whatever you mapped)
+    private $port = "3306";             // MySQL default port (or whatever you mapped)
     private $db_name = "notes_system";  // Your database name
     private $username = "mysql";        // Your MySQL username
     private $password = "QffIbyRUoqDcxGsJw3wA5T1WvWZlFR7OAzj4FkgczEWkcHBwwo8wivZLAd0BtCIN"; // Your MySQL password
