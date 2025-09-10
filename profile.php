@@ -111,6 +111,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Profile - <?php echo APP_NAME; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeIcon = document.getElementById(inputId + '-eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path d="m1 12 4-8 11 8-11 8-4-8z"/>
+                    <path d="m9.5 7.5-.5 12.5 5-12.5-4.5 0z"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                `;
+            }
+        }
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -184,20 +205,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     <div class="form-group">
                         <label for="current_password">Current Password</label>
-                        <input type="password" id="current_password" name="current_password" 
-                               placeholder="Enter your current password">
+                        <div class="password-input-container">
+                            <input type="password" id="current_password" name="current_password" 
+                                   placeholder="Enter your current password">
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('current_password')">
+                                <svg id="current_password-eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="new_password">New Password</label>
-                        <input type="password" id="new_password" name="new_password" 
-                               placeholder="Enter new password (at least 6 characters)">
+                        <div class="password-input-container">
+                            <input type="password" id="new_password" name="new_password" 
+                                   placeholder="Enter new password (at least 6 characters)">
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new_password')">
+                                <svg id="new_password-eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="confirm_password">Confirm New Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" 
-                               placeholder="Confirm new password">
+                        <div class="password-input-container">
+                            <input type="password" id="confirm_password" name="confirm_password" 
+                                   placeholder="Confirm new password">
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm_password')">
+                                <svg id="confirm_password-eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
