@@ -1,9 +1,10 @@
 <?php
 class Database {
-    private $host = "localhost";
+    private $host = "coolify-db";
     private $db_name = "notes_system";
-    private $username = "root";
-    private $password = "";
+    private $username = "mysql";
+    private $password = "QffIbyRUoqDcxGsJw3wA5T1WvWZlFR7OAzj4FkgczEWkcHBwwo8wivZLAd0BtCIN";
+    private $port = 3307;
     public $conn;
 
     public function getConnection() {
