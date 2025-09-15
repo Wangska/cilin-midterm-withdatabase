@@ -4,9 +4,8 @@ require_once 'classes/User.php';
 
 requireLogin();
 
-$database = new Database();
-$db = $database->getConnection();
-$user = new User($db);
+// Database connection available as $conn from config
+$user = new User($conn);
 
 $error = '';
 $success = '';
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $error = 'New passwords do not match.';
                 } else {
                     // Verify current password
-                    $tempUser = new User($db);
+                    $tempUser = new User($conn);
                     if ($tempUser->login($_SESSION['username'], $current_password)) {
                         $passwordChanged = true;
                     } else {

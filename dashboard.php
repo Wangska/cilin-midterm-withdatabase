@@ -5,10 +5,8 @@ require_once 'classes/User.php';
 
 requireLogin();
 
-$database = new Database();
-$db = $database->getConnection();
-$note = new Note($db);
-$user = new User($db);
+$note = new Note($conn);
+$user = new User($conn);
 
 // Get user info
 $user->getUserById($_SESSION['user_id']);

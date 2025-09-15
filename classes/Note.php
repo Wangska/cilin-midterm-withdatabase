@@ -16,38 +16,40 @@ class Note {
     }
 
     public function create($user_id, $title, $content, $color = '#ffffff') {
-        $query = "INSERT INTO " . $this->table_name . " (user_id, title, content, color) VALUES (:user_id, :title, :content, :color)";
-        $stmt = $this->conn->prepare($query);
+        $query = "INSERT INTO " . $this->table_name . " (user_id, title, content, color) VALUES (?, ?, ?, ?)";
+        $stmt = mysqli_prepare($this->conn, $query);
         
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':content', $content);
-        $stmt->bindParam(':color', $color);
+        mysqli_stmt_bind_param($stmt, "isss", $user_id, $title, $content, $color);
 
-        if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
+        if (mysqli_stmt_execute($stmt)) {
+            $this->id = mysqli_insert_id($this->conn);
+            mysqli_stmt_close($stmt);
             return true;
         }
+        mysqli_stmt_close($stmt);
         return false;
     }
 
     public function getUserNotes($user_id) {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = :user_id ORDER BY updated_at DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = ? ORDER BY updated_at DESC";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $notes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_stmt_close($stmt);
+        return $notes;
     }
 
     public function getNoteById($id, $user_id) {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->execute();
+        $query = "SELECT * FROM " . $this->table_name . " WHERE id = ? AND user_id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt, "ii", $id, $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         
-        if ($stmt->rowCount() == 1) {
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
             $this->id = $row['id'];
             $this->user_id = $row['user_id'];
             $this->title = $row['title'];
@@ -55,42 +57,43 @@ class Note {
             $this->color = $row['color'];
             $this->created_at = $row['created_at'];
             $this->updated_at = $row['updated_at'];
+            mysqli_stmt_close($stmt);
             return true;
         }
+        mysqli_stmt_close($stmt);
         return false;
     }
 
     public function update($id, $user_id, $title, $content, $color) {
-        $query = "UPDATE " . $this->table_name . " SET title = :title, content = :content, color = :color WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->conn->prepare($query);
+        $query = "UPDATE " . $this->table_name . " SET title = ?, content = ?, color = ? WHERE id = ? AND user_id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
         
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':content', $content);
-        $stmt->bindParam(':color', $color);
+        mysqli_stmt_bind_param($stmt, "sssii", $title, $content, $color, $id, $user_id);
 
-        return $stmt->execute();
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        return $result;
     }
 
     public function delete($id, $user_id) {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':user_id', $user_id);
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ? AND user_id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
+        mysqli_stmt_bind_param($stmt, "ii", $id, $user_id);
         
-        return $stmt->execute();
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        return $result;
     }
 
     public function updateColor($id, $user_id, $color) {
-        $query = "UPDATE " . $this->table_name . " SET color = :color WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->conn->prepare($query);
+        $query = "UPDATE " . $this->table_name . " SET color = ? WHERE id = ? AND user_id = ?";
+        $stmt = mysqli_prepare($this->conn, $query);
         
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':user_id', $user_id);
-        $stmt->bindParam(':color', $color);
+        mysqli_stmt_bind_param($stmt, "sii", $color, $id, $user_id);
 
-        return $stmt->execute();
+        $result = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        return $result;
     }
 }
 ?>

@@ -23,16 +23,15 @@ if (isLoggedIn()) {
 // Check database connection
 echo "<h3>2. Database Connection:</h3>";
 try {
-    $database = new Database();
-    $db = $database->getConnection();
-    if ($db) {
+    // Database connection available as $conn from config
+    if ($conn) {
         echo "✅ Database connection successful<br>";
         
         // Check if tables exist
         $tables = ['users', 'notes', 'user_sessions'];
         foreach ($tables as $table) {
-            $stmt = $db->query("SHOW TABLES LIKE '$table'");
-            if ($stmt->rowCount() > 0) {
+            $result = mysqli_query($conn, "SHOW TABLES LIKE '$table'");
+            if (mysqli_num_rows($result) > 0) {
                 echo "✅ Table '$table' exists<br>";
             } else {
                 echo "❌ Table '$table' does not exist<br>";
@@ -40,9 +39,9 @@ try {
         }
         
         // Check if there are users
-        $stmt = $db->query("SELECT COUNT(*) as count FROM users");
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo "📊 Total users: " . $result['count'] . "<br>";
+        $result = mysqli_query($conn, "SELECT COUNT(*) as count FROM users");
+        $row = mysqli_fetch_assoc($result);
+        echo "📊 Total users: " . $row['count'] . "<br>";
         
     } else {
         echo "❌ Database connection failed<br>";
@@ -55,7 +54,7 @@ try {
 if (isLoggedIn()) {
     echo "<h3>3. Test Note Creation:</h3>";
     try {
-        $note = new Note($db);
+        $note = new Note($conn);
         $testResult = $note->create($_SESSION['user_id'], "Test Note", "This is a test note", "#ffffff");
         
         if ($testResult) {

@@ -26,9 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif ($password !== $confirm_password) {
         $error = 'Passwords do not match.';
     } else {
-        $database = new Database();
-        $db = $database->getConnection();
-        $user = new User($db);
+        // Database connection available as $conn from config
+        $user = new User($conn);
         
         if ($user->register($username, $email, $password)) {
             $success = 'Account created successfully! You can now log in.';
