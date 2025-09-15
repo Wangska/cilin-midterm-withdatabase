@@ -6,9 +6,7 @@ require_once 'classes/User.php';
 // Force login for testing (you can remove this after testing)
 if (!isLoggedIn()) {
     // Try to log in the demo user for testing
-    $database = new Database();
-    $db = $database->getConnection();
-    $user = new User($db);
+    $user = new User($conn);
     
     if ($user->login('demo', 'password')) {
         $_SESSION['user_id'] = $user->id;
@@ -45,9 +43,7 @@ if (isLoggedIn()) {
     // Include the API logic directly
     require_once 'classes/Note.php';
     
-    $database = new Database();
-    $db = $database->getConnection();
-    $note = new Note($db);
+    $note = new Note($conn);
     
     $userId = $_SESSION['user_id'];
     

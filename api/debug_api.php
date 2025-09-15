@@ -30,9 +30,8 @@ if (!isLoggedIn()) {
     exit;
 }
 
-$database = new Database();
-$db = $database->getConnection();
-$note = new Note($db);
+// Database connection available as $conn from config
+$note = new Note($conn);
 
 // Get raw input
 $raw_input = file_get_contents('php://input');

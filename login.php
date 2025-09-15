@@ -17,9 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($username) || empty($password)) {
         $error = 'Please fill in all fields.';
     } else {
-        $database = new Database();
-        $db = $database->getConnection();
-        $user = new User($db);
+        $user = new User($conn);
         
         if ($user->login($username, $password)) {
             $_SESSION['user_id'] = $user->id;
